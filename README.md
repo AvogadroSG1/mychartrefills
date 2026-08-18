@@ -7,6 +7,8 @@ A deterministic CLI tool, MCP Server, and AI agent skill for automating prescrip
 ## Features
 
 - **Claude Desktop & Agent Ready**: Ships with a Model Context Protocol (MCP) server so Claude Desktop and AI agents can inspect active scripts and submit refills conversationally.
+- **Mise Integration**: Full toolchain and task automation via `mise` for one-command installation, testing, and bundling.
+- **GitHub Release Distribution**: Download a single, pre-bundled `my-chart-mcp.js` file with zero repository or npm installation needed.
 - **Persistent Session & 2FA Handling**: Launches an interactive browser session once to establish device trust and 2FA; subsequent operations run headlessly in the background.
 - **Deterministic Prescription Inspector**: Scrapes and parses active prescriptions, detecting refill eligibility (`isDueSoon`), dosage instructions, authorized prescribers, and target pharmacies.
 - **Safe Refill Engine**: Supports dry-run validation (`--dry-run`) before executing actual refill submissions (`--execute`).
@@ -14,14 +16,68 @@ A deterministic CLI tool, MCP Server, and AI agent skill for automating prescrip
 
 ---
 
-## Prerequisites
+## Zero-Install for Claude Desktop (Download Release)
 
-- **Node.js**: `v20.0.0` or higher
-- **Playwright Chromium**: Downloaded automatically during setup
+If you don't want to clone a repository or run build tools:
+
+### 1. Download the Latest Standalone Script
+```bash
+mkdir -p ~/.config/mychart-refills
+curl -fsSL https://github.com/AvogadroSG1/mychartrefills/releases/latest/download/my-chart-mcp.js \
+  -o ~/.config/mychart-refills/my-chart-mcp.js
+```
+
+### 2. Configure Claude Desktop
+Add to your `claude_desktop_config.json`:
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "mychart-refills": {
+      "command": "node",
+      "args": [
+        "~/.config/mychart-refills/my-chart-mcp.js"
+      ]
+    }
+  }
+}
+```
+
+### 3. Restart Claude Desktop
+You can now ask Claude Desktop:
+- *"Check my MyChart session"*
+- *"Log in to MyChart"*
+- *"What prescriptions do I have due for refill?"*
+- *"Refill my medications"*
 
 ---
 
-## Quick Start
+## Developer Quick Start (with `mise`)
+
+If you have [mise](https://mise.jdx.dev/) installed:
+
+```bash
+# 1. Install toolchains, npm dependencies & Playwright browsers
+mise run setup
+
+# 2. Install CLI to ~/.local/bin (available anywhere on $PATH)
+mise run install:cli
+
+# 3. (Optional) Auto-configure Claude Desktop with MCP server
+mise run install:desktop
+
+# 4. Authenticate MyChart (one-time interactive 2FA)
+mise run auth
+
+# 5. List prescriptions & check refill eligibility
+mise run list
+```
+
+---
+
+## Standard Setup (without `mise`)
 
 ### 1. Install Dependencies
 ```bash
@@ -29,55 +85,18 @@ npm install
 npx playwright install chromium
 ```
 
-### 2. Optional Global Linking
-To use `mychart-refills` from any directory:
+### 2. Global Linking
+To make `mychart-refills` available in your terminal:
 ```bash
 npm link
 ```
-*(Or use `./bin/mychart-refills` directly from the repository root).*
+*(Or use `./bin/mychart-refills` directly).*
 
 ### 3. Authenticate with MyChart
-Run the interactive login command. This opens a browser window where you log in and complete your 2FA verification:
 ```bash
 ./bin/mychart-refills auth --login
 ```
 Once logged in, the session and device trust cookies are stored securely in `~/.config/mychart-refills/browser-profile`.
-
----
-
-## Claude Desktop Setup (MCP)
-
-To use MyChart Refills directly inside **Claude Desktop**:
-
-### 1. Open Claude Desktop Configuration
-On macOS, edit:
-`~/Library/Application Support/Claude/claude_desktop_config.json`
-
-On Windows, edit:
-`%APPDATA%\Claude\claude_desktop_config.json`
-
-### 2. Add the `mychart-refills` MCP Server
-```json
-{
-  "mcpServers": {
-    "mychart-refills": {
-      "command": "node",
-      "args": [
-        "/ABSOLUTE/PATH/TO/mychart_refills/dist/my-chart-mcp.js"
-      ]
-    }
-  }
-}
-```
-*(Replace `/ABSOLUTE/PATH/TO/mychart_refills` with the actual path to this cloned repository).*
-
-### 3. Restart Claude Desktop
-Restart Claude Desktop. You will now see the hammer icon with tools available:
-- `mychart_check_auth`: Check session status.
-- `mychart_login`: Launch interactive browser for 2FA login.
-- `mychart_list_prescriptions`: Inspect active medications and see which are due soon.
-- `mychart_submit_refill`: Dry-run or submit prescription refills.
-- `mychart_get_config` / `mychart_set_config`: Manage medication whitelists and default pharmacies.
 
 ---
 
@@ -143,8 +162,12 @@ export MYCHART_BASE_URL="https://mychart.provider.org/MyChart/"
 
 ---
 
-## Running Tests
+## Running Tests & Packaging
 
 ```bash
-npm test
+# Run unit & coverage test suites
+mise run test
+
+# Package standalone release bundle
+mise run package
 ```

@@ -1,0 +1,53 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag name (e.g. v1.0.0)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup toolchains via mise
+        uses: jdx/mise-action@v2
+
+      - name: Install dependencies and browsers
+        run: mise run setup
+
+      - name: Run verification tests
+        run: mise run test
+
+      - name: Build standalone artifacts
+        run: mise run build
+
+      - name: Package bundle archive
+        run: |
+          mkdir -p dist/bundle
+          cp -f dist/my-chart-mcp.js dist/bundle/
+          cp -f scripts/install-claude-desktop.js dist/bundle/
+          cp -f README.md dist/bundle/
+          tar -czf dist/mychart-mcp-bundle.tar.gz -C dist/bundle .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/my-chart-mcp.js
+            dist/mychart-mcp-bundle.tar.gz
+          generate_release_notes: true
+          tag_name: ${{ github.ref_name || github.event.inputs.tag_name }}
