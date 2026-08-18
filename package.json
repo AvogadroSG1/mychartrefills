@@ -1,0 +1,28 @@
+{
+  "name": "mychart_refills",
+  "version": "1.0.0",
+  "description": "Deterministic CLI, MCP Server, and Agent Skill for Autonomous MyChart Refills",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "mychart-refills": "./bin/mychart-refills",
+    "mychart-mcp": "./bin/mychart-mcp"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "build": "ncc build bin/mychart-mcp -o dist && cp -f dist/index.js dist/my-chart-mcp.js",
+    "start": "node bin/mychart-refills",
+    "mcp": "node bin/mychart-mcp",
+    "install-desktop": "node scripts/install-claude-desktop.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.0",
+    "playwright": "^1.50.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.45.0"
+  }
+}

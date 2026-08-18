@@ -1,0 +1,43 @@
+name: mychart_refills
+version: 0.1.0
+targets:
+    - codex
+    - opencode
+    - claude
+dependencies:
+    apm:
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-documentation
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-performance
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-project-layout
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-security
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/grill-with-docs
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-data-structures
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-dependency-injection
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-dependency-management
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-naming
+        - /Users/poconnor/peter_code/ai_support/skills/obsidian/obsidian-markdown
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/to-issues
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-cli
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-structs-interfaces
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/diagnosing-bugs
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/tdd
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/codebase-design
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/handoff
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/prototype
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/to-prd
+        - /Users/poconnor/peter_code/ai_support/skills/workflow/git-pushing
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/improve-codebase-architecture
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-benchmark
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-error-handling
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-linter
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-popular-libraries
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-testing
+        - /Users/poconnor/peter_code/ai_support/skills/obsidian/defuddle
+        - /Users/poconnor/peter_code/ai_support/skills/obsidian/obsidian-cli
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/implement
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/triage
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-code-style
+        - /Users/poconnor/peter_code/ai_support/skills/golang/golang-design-patterns
+        - /Users/poconnor/peter_code/ai_support/skills/obsidian/obsidian-bases
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/domain-modeling
+        - /Users/poconnor/peter_code/ai_support/skills/ai-workflow/mattpocock/resolving-merge-conflicts
