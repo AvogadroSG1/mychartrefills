@@ -1,0 +1,17 @@
+[tools]
+go = "1.26.4"
+golangci-lint = "latest"
+"go:golang.org/x/vuln/cmd/govulncheck" = "latest"
+lefthook = "latest"
+
+[tasks.fmt]
+run = "gofmt -w $(find . -name '*.go' -not -path './.git/*' -not -path './web/*')"
+
+[tasks.lint]
+run = "golangci-lint run ./..."
+
+[tasks.test]
+run = "go test -cover ./..."
+
+[tasks.ci]
+run = "mise run fmt && mise run lint && mise run test && govulncheck ./..."
