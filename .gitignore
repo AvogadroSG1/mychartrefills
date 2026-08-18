@@ -41,6 +41,9 @@
 vendor/
 node_modules/
 dist/mcp/
+dist/bundle/
+dist/*.tar.gz
+dist/*.zip
 
 # Beads / Dolt files (added by bd init)
 .beads/proxieddb/

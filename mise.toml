@@ -1,8 +1,53 @@
 [tools]
 go = "1.26.4"
+node = "22"
 golangci-lint = "latest"
 "go:golang.org/x/vuln/cmd/govulncheck" = "latest"
 lefthook = "latest"
+
+[tasks.setup]
+description = "Install npm packages and Playwright browser binaries"
+run = "npm install && npx playwright install chromium"
+
+[tasks.build]
+description = "Build standalone single-file MCP server artifact (dist/my-chart-mcp.js)"
+run = "npm run build"
+depends = ["setup"]
+
+[tasks.package]
+description = "Package standalone bundle archive for GitHub releases"
+run = """
+mise run build
+mkdir -p dist/bundle
+cp -f dist/my-chart-mcp.js dist/bundle/
+cp -f scripts/install-claude-desktop.js dist/bundle/
+cp -f README.md dist/bundle/
+tar -czf dist/mychart-mcp-bundle.tar.gz -C dist/bundle .
+echo "✓ Created dist/mychart-mcp-bundle.tar.gz"
+"""
+depends = ["build"]
+
+[tasks."install:cli"]
+description = "Install mychart-refills CLI into ~/.local/bin"
+run = """
+mkdir -p ~/.local/bin
+ln -sf "$(pwd)/bin/mychart-refills" ~/.local/bin/mychart-refills
+chmod +x ~/.local/bin/mychart-refills
+echo "✓ mychart-refills installed to ~/.local/bin/mychart-refills"
+"""
+
+[tasks."install:desktop"]
+description = "Auto-configure Claude Desktop with bundled MCP server"
+run = "node scripts/install-claude-desktop.js"
+depends = ["build"]
+
+[tasks.auth]
+description = "Launch interactive MyChart login to complete 2FA authentication"
+run = "./bin/mychart-refills auth --login"
+
+[tasks.list]
+description = "List active MyChart prescriptions and refill eligibility"
+run = "./bin/mychart-refills list"
 
 [tasks.fmt]
 run = "gofmt -w $(find . -name '*.go' -not -path './.git/*' -not -path './web/*')"
@@ -11,7 +56,8 @@ run = "gofmt -w $(find . -name '*.go' -not -path './.git/*' -not -path './web/*'
 run = "golangci-lint run ./..."
 
 [tasks.test]
-run = "go test -cover ./..."
+description = "Run Node.js and Go test suites"
+run = "npm test && go test -cover ./..."
 
 [tasks.ci]
 run = "mise run fmt && mise run lint && mise run test && govulncheck ./..."
