@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "mychart_refills",
+  "project_id": "dae64221-e639-4035-987b-b97c88f4d58e"
+}
